@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var campgroundSchema = new mongoose.Schema({
+var parkSchema = new mongoose.Schema({
     name: String,
     img: String,
     description: String,
@@ -20,4 +20,4 @@ var campgroundSchema = new mongoose.Schema({
     ]
 });
 
-module.exports = mongoose.model("Campground", campgroundSchema);
+module.exports = mongoose.model("Park", parkSchema);

@@ -1,28 +1,28 @@
 var express = require("express");
 var router = express.Router();
-var Campground = require("../models/campground");
+var Park = require("../models/park");
 var Comment = require("../models/comment");
 var middleware = require("../middleware");
 
 
-router.get("/campgrounds/:id/comments/new", middleware.isLoggedIn, function(req, res) {
-    Campground.findById(req.params.id, function(err, foundCampground) {
+router.get("/parks/:id/comments/new", middleware.isLoggedIn, function(req, res) {
+    Park.findById(req.params.id, function(err, foundPark) {
         if (err) {
             console.log(err);
         } else {
-            res.render("comments/new", {campground: foundCampground});
+            res.render("comments/new", {park: foundPark});
         }
-    })
+    });
     
 });
 
 
-router.post("/campgrounds/:id/comments", middleware.isLoggedIn, function(req, res) {
-    //look up campground by ID
-    Campground.findById(req.params.id, function(err, campground) {
+router.post("/parks/:id/comments", middleware.isLoggedIn, function(req, res) {
+    //look up park by ID
+    Park.findById(req.params.id, function(err, park) {
         if (err) {
             console.log(err);
-            res.redirect("/campgrounds");
+            res.redirect("/parks");
         } else {
             Comment.create(req.body.comment, function(err, comment) {
                 if (err) {
@@ -33,51 +33,51 @@ router.post("/campgrounds/:id/comments", middleware.isLoggedIn, function(req, re
                     comment.author.username = req.user.username;
                     // console.log(comment);
                     comment.save();
-                    campground.comments.push(comment);
-                    campground.save();
+                    park.comments.push(comment);
+                    park.save();
                     req.flash("success", "Comment added successfully");
-                    res.redirect("/campgrounds/" + campground._id);
+                    res.redirect("/parks/" + park._id);
                 }
-            })
+            });
         }
-    })
+    });
     
 });
 
 //EDIT
-router.get("/campgrounds/:id/comments/:comment_id/edit", middleware.checkCommentOwnership, function (req, res) {
+router.get("/parks/:id/comments/:comment_id/edit", middleware.checkCommentOwnership, function (req, res) {
     Comment.findById(req.params.comment_id, function(err, foundComment) {
         if (err) {
             req.flash("error", "Comment not found");
             res.redirect("back");
         } else {
-            res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
-        }
-    })
-});
-
-//UPDATE
-
-router.put("/campgrounds/:id/comments/:comment_id", middleware.checkCommentOwnership, function (req, res) {
-    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, undatedComment) {
-        if (err) {
-            console.log(err);
-            res.redirect("back");
-        } else {
-            res.redirect("/campgrounds/" + req.params.id);
+            res.render("comments/edit", {park_id: req.params.id, comment: foundComment});
         }
     });
 });
 
-//DESTROY CAMPGROUND ROUTE
-router.delete("/campgrounds/:id/comments/:comment_id", middleware.checkCommentOwnership, function(req, res) {
+//UPDATE
+
+router.put("/parks/:id/comments/:comment_id", middleware.checkCommentOwnership, function (req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, undatedComment) {
+        if (err) {
+            // console.log(err);
+            res.redirect("back");
+        } else {
+            res.redirect("/parks/" + req.params.id);
+        }
+    });
+});
+
+//DESTROY ROUTE
+router.delete("/parks/:id/comments/:comment_id", middleware.checkCommentOwnership, function(req, res) {
     Comment.findByIdAndRemove(req.params.comment_id, function(err) {
         if (err) {
-            console.log(err);
+            // console.log(err);
             res.redirect("back");
         }
         req.flash("success", "Comment successfully deleted");
-        res.redirect("/campgrounds/" + req.params.id);
+        res.redirect("/parks/" + req.params.id);
     }); 
 });
 

@@ -9,14 +9,13 @@ var express         = require("express"),
     User            = require("./models/user"),
     seedDB          = require("./seeds");
 
-var campgroundRoutes = require("./routes/campgrounds"),
+var parkRoutes = require("./routes/parks"),
     commentRoutes    = require("./routes/comments"),
     indexRoutes      = require("./routes/index");
 
 
-// console.log(process.env.DATABASEURL);
-
-mongoose.connect(process.env.DATABASEURL);
+var url = process.env.DATABASEURL || "mongodb://localhost/parkbook"
+mongoose.connect(url);
 // mongoose.connect("mongodb://jialuzh:webdev@ds257579.mlab.com:57579/yelpcamp");
 
 
@@ -51,9 +50,9 @@ app.use(function (req, res, next) {
 
 app.use(indexRoutes);
 app.use(commentRoutes);
-app.use(campgroundRoutes);
+app.use(parkRoutes);
 
 
 app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("YelpCamp server has started!!!");
+    console.log("Parkbook server has started!!!");
 });
