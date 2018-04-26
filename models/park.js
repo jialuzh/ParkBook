@@ -5,6 +5,9 @@ var parkSchema = new mongoose.Schema({
     img: String,
     description: String,
     price: String,
+    location: String,
+    lat: Number,
+    lng: Number,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

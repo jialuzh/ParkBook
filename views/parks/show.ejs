@@ -3,13 +3,16 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-3">
-			<p class="lead">YelpCamp</p>
-			<div class="list-group">
-				<li class="list-group-item active">Info 1</li>
-				<li class="list-group-item">Info 2</li>
-				<li class="list-group-item">Info 3</li>
-			</div>
-			<a class="btn btn-primary" href="/parks">Back</a>
+			<p class="lead">Location</p>
+			<h4><a><%= park.location %></a></h4>
+			<!--<div class="list-group">-->
+			<!--	<li class="list-group-item active">Info 1</li>-->
+			<!--	<li class="list-group-item">Info 2</li>-->
+			<!--	<li class="list-group-item">Info 3</li>-->
+			<!--</div>-->
+			<div id="map"></div>
+			<p>  </p>
+			<a class="btn btn-primary btn-lg" href="/parks">Back</a>
 		</div>
 		<div class="col-md-9">
 			<div class='thumbnail'>
@@ -64,5 +67,34 @@
 		</div>
 	</div>
 </div>	
+
+<script>
+  function initMap() {
+    var lat = <%= park.lat %>;
+    var lng = <%= park.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= park.name %><br />
+      <%= park.location %></strong>
+      <p><%= park.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPVwSRRdRkBgLskX1dGNl21V0KmKWz1u8&callback=initMap"></script>
 	
 <% include ../partials/footer %>

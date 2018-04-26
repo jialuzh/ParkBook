@@ -3,6 +3,17 @@ var router = express.Router();
 var Park = require("../models/park");
 var middleware = require("../middleware");
 
+var NodeGeocoder = require('node-geocoder');
+ 
+var options = {
+    provider: 'google',
+    httpAdapter: 'https',
+    apiKey: process.env.GEOCODER_API_KEY,
+    formatter: null
+};
+ 
+var geocoder = NodeGeocoder(options);
+
 //index route
 router.get("/parks", function(req, res) {
     Park.find({}, function (err, parks) {
@@ -21,16 +32,27 @@ router.get("/parks", function(req, res) {
 //create route
 router.post("/parks", middleware.isLoggedIn, function (req, res) {
     var author = {id: req.user._id, username: req.user.username};
-    console.log(req.body.park);
-    Park.create(req.body.park, function (err, newlyCreated) {
-        if (err) {
-            console.log(err);
-        } else {
-            newlyCreated.author = author;
-            newlyCreated.save();
-            console.log(newlyCreated);
-            res.redirect("/parks");
+    geocoder.geocode(req.body.location, function (err, data) {
+        if (err || !data.length) {
+          req.flash('error', 'Invalid address');
+          return res.redirect('back');
         }
+        var lat = data[0].latitude;
+        var lng = data[0].longitude;
+        var location = data[0].formattedAddress;
+        Park.create(req.body.park, function (err, newlyCreated) {
+            if (err) {
+                console.log(err);
+            } else {
+                newlyCreated.author = author;
+                newlyCreated.lat = lat;
+                newlyCreated.lng = lng;
+                newlyCreated.location = location;
+                newlyCreated.save();
+                console.log(newlyCreated);
+                res.redirect("/parks");
+            }
+        });
     });
 });
 
@@ -71,13 +93,22 @@ router.get("/parks/:id/edit", middleware.checkParkOwnership, function (req, res)
 //UPDATE
 
 router.put("/parks/:id", middleware.checkParkOwnership, function (req, res) {
-    Park.findByIdAndUpdate(req.params.id, req.body.park, function (err, updatedPark) {
-        if (err) {
-            req.flash("error", "park not found");
-            console.log(err);
-        } else {
-            res.redirect("/parks/" + updatedPark.id);
+    geocoder.geocode(req.body.location, function (err, data) {
+        if (err || !data.length) {
+          req.flash('error', 'err.message');
+          return res.redirect('back');
         }
+        req.body.park.lat = data[0].latitude;
+        req.body.park.lng = data[0].longitude;
+        req.body.park.location = data[0].formattedAddress;
+        Park.findByIdAndUpdate(req.params.id, req.body.park, function (err, updatedPark) {
+            if (err) {
+                req.flash("error", "err.message");
+                console.log(err);
+            } else {
+                res.redirect("/parks/" + updatedPark.id);
+            }
+        });
     });
 });
 
