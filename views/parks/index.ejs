@@ -16,10 +16,11 @@
             <h3>Our Most Popular Parks</h3>
         </div>
     </div>
-
+</div>
+<div class="container">
     <div class='row text-center' style='display:flex; flex-wrap: wrap;'>
         <% parks.forEach(function(park) { %>
-            <div class='col-md-3 col-sm-6'>
+            <div class='col-md-3 col-sm-12'>
                 <div class='thumbnail'>
                     <a href="/parks/<%= park._id %>">
                         <img src = "<%=park.img %>"></img>
