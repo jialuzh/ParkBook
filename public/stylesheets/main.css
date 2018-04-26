@@ -17,3 +17,7 @@
     height: 400px;
     width: 100%;
 }
+
+#login-back {
+    float: right;
+}
