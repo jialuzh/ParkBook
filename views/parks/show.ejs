@@ -57,15 +57,15 @@
 					        </p>
 					        <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
 					        <div class="text-left">
-							<a class="btn btn-xs btn-warning" 
-								href="/parks/<%= park._id %>/comments/<%= comment._id %>/edit">
-								Edit
-							</a>
-							<form class="delete" action="/parks/<%= park._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
-								<button class="btn btn-xs btn-danger">DELETE</button>
-							</form>
+								<a class="btn btn-xs btn-warning" 
+									href="/parks/<%= park._id %>/comments/<%= comment._id %>/edit">
+									Edit
+								</a>
+								<form class="delete" action="/parks/<%= park._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
+									<button class="btn btn-xs btn-danger">DELETE</button>
+								</form>
+							</div>
 							<% } %>
-					</div>
 				        </div>
 				    </div>
 				<% }) %>
