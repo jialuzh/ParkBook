@@ -23,5 +23,6 @@
 }
 
 #back_button {
-    margin: 10px;
+    float: right;
+    margin-right: 10px;
 }

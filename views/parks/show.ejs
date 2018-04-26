@@ -12,7 +12,9 @@
 		            <p><%= park.description %></p>
 		            <p>
 						<em>Submitted by: <%= park.author.username %>, <%= moment(park.createdAt).fromNow() %></em>
+						<a class="btn btn-primary btn-md text-center" id="back_button" href="/parks">Back</a>
 					</p>
+					
 		            <% if(currentUser && park.author.id.equals(currentUser._id)) { %>
 		            <div class="text-left">
 						<a class="btn btn-xs btn-warning" href="/parks/<%= park._id %>/edit">Edit</a>
@@ -22,6 +24,7 @@
 						</form>
 					</div>
 					<% } %>
+					
 		        </div>
 		        
 			</div>
@@ -35,9 +38,6 @@
 			<div id="map"></div>
 			<p class="lead"><i class="fas fa-map-marker-alt"></i> Location</p>
 			<h4><a><%= park.location %></a></h4>
-			<div class="text-center" id="back_button">
-				<a class="btn btn-primary btn-lg text-center" href="/parks">Back</a>
-			</div>
 		</div>
 	</div>
 	<div class="row">
