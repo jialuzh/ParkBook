@@ -2,7 +2,19 @@
 	
 <div class="container">
 	<div class="row">
-		
+		<div class="col-md-3">
+			<!--<div class="list-group">-->
+			<!--	<li class="list-group-item active">Info 1</li>-->
+			<!--	<li class="list-group-item">Info 2</li>-->
+			<!--	<li class="list-group-item">Info 3</li>-->
+			<!--</div>-->
+			<div id="map"></div>
+			<p class="lead"><i class="fas fa-map-marker-alt"></i> Location</p>
+			<h4><a><%= park.location %></a></h4>
+			<div class="text-center" id="back_button">
+				<a class="btn btn-primary btn-lg text-center" href="/parks">Back</a>
+			</div>
+		</div>
 		<div class="col-md-9">
 			<div class='thumbnail'>
 		        <img class="image-responsive" src = "<%=park.img %>"></img>
@@ -52,22 +64,9 @@
 				        </div>
 				    </div>
 				<% }) %>
-				
-			</div>
-			<div class="col-md-3">
-			<!--<div class="list-group">-->
-			<!--	<li class="list-group-item active">Info 1</li>-->
-			<!--	<li class="list-group-item">Info 2</li>-->
-			<!--	<li class="list-group-item">Info 3</li>-->
-			<!--</div>-->
-			<div id="map"></div>
-			<p class="lead"><i class="fas fa-map-marker-alt"></i> Location</p>
-			<h4><a><%= park.location %></a></h4>
-			<div class="text-center" id="back_button">
-				<a class="btn btn-primary btn-lg text-center" href="/parks">Back</a>
 			</div>
 		</div>
-		</div>
+		
 	</div>
 </div>	
 
